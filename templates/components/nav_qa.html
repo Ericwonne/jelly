@@ -1,0 +1,47 @@
+<!--问答中心导航栏，带搜索表单-->
+{% load my_filters %}
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#user_items').hide()
+        $('#user').mouseover(function() {
+            if($("#user").children('a').text()!="登录/注册"){
+                $("#user_items").show();
+            }
+        });
+        $('#user').mouseleave(function(){
+            $("#user_items").hide();
+        })
+    });
+    function search_qa() {
+        document.form1.action = "/qa/search";
+        document.form1.submit();
+    }
+</script>
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container-fluid">
+    <!--头部Jelly标识-->
+    <div class="navbar-header">
+      <!--小屏设备（width<768px）隐藏登录标签以及个人信息-->
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#user_info">
+        <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>
+      </button>
+      <a href="/" class="navbar-brand">Jelly</a>
+    </div>
+    <form name="form1" class="navbar-form pull-left form-in-nav" method="get">
+      <input type="search" id="q" name="q" class="search-in">
+      <input id="jelly_search_btn" type="button" value="搜问答" onclick="search()">
+    </form>
+    <!--登录标签以及个人信息-->
+    <div class="collapse navbar-collapse" id="user_info">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/qa/">QA</a></li>
+        <li><a href="{{ url }}" id="user">{{ name }}</a>
+          <ul id="user_items" class="dropdown-menu dropdown-menu-right">
+          <li><a href="/user/user_info/{{ request.session | get_attr:'_auth_user_id'}}">个人资料</a></li>
+              <li><a href="/user/logout">退出</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

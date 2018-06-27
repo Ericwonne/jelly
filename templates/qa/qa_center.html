@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load my_filters %}
+<head>
+  {% include "components/head.html" %}
+    <title>问答中心</title>
+  <link rel="stylesheet" href="/static/css/result.css">
+</head>
+<body>
+<div class="main">
+  {% include "components/nav_search_form.html" %}
+  <!--搜索问答结果展示模块-->
+  <ul>
+  {% for object in object_list %}
+      <li>会被挡住啊</li>
+      {% if object|isinst:'qa.models.Question' %}
+        <li><a href="/qa/Q_detail/{{ object.pk}}">{{ object.title }}</a></li>
+      {% else %}
+        <li><a href="/qa/A_detail/{{ object.pk }}">{{ object.question }}</a></li>
+      {% endif %}
+  {% endfor %}
+  </ul>
+</body>
+</html>

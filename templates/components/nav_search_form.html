@@ -1,0 +1,109 @@
+<!--导航栏，带搜索表单-->
+{% load my_filters %}
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#user_items').hide()
+        $('#user').mouseover(function() {
+            if($("#user").children('a').text()!="登录/注册"){
+                $("#user_items").show();
+            }
+        });
+        $('#user').mouseleave(function(){
+            $("#user_items").hide();
+        })
+    });
+    function search(){
+        document.form1.action="/search";
+        document.form1.submit();
+    }
+    function ask(){
+        var current_user=$('#current_user').text();
+        if(current_user!='登录/注册'){
+            $('#ask').modal({
+                show: 'true'
+            });
+        }else{
+            alert('请您先登录！');
+        }
+    }
+</script>
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container-fluid">
+    <!--头部Jelly标识-->
+    <div class="navbar-header">
+      <!--小屏设备（width<768px）隐藏登录标签以及个人信息-->
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#user_info">
+        <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>
+      </button>
+      <a href="/" class="navbar-brand">Jelly</a>
+    </div>
+    <form name="form1" class="navbar-form pull-left form-in-nav" method="get">
+      <input type="search" id="q" name="q" class="search-in">
+      <input id="jelly_search_btn" type="button" value="搜索" onclick="search()">
+      <input id="jelly_ask_btn" type="button" value="提问" onclick="ask()">
+    </form>
+    <!--登录标签以及个人信息-->
+    <div class="collapse navbar-collapse" id="user_info">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/qa/">QA</a></li>
+        <li><a href="{{ url }}" id="user">{{ name }}</a>
+          <ul id="user_items" class="dropdown-menu dropdown-menu-right">
+          <li><a href="/user/user_info/{{ request.session | get_attr:'_auth_user_id'}}">个人资料</a></li>
+              <li><a href="/user/logout">退出</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<form method="post" action="{% url 'qa:ask' %}" class="form-horizontal" role="form" id="form_data" style="margin: 20px;">
+    <div class="modal fade" id="ask" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        提问
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="title" class="col-sm-3 control-label">标题</label>
+                            <div class="col-sm-9" id="title">
+                                <textarea  class="form-control"  name="title"  id="title"
+                                       placeholder="标题">
+                                </textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="content" class="col-sm-3 control-label">内容</label>
+                            <div class="col-sm-9" id="content">
+                                <textarea  class="form-control"  name="content"  id="content"
+                                       placeholder="内容">
+                                </textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="categories" class="col-sm-3 control-label">标签</label>
+                            <div class="col-sm-9" id="categories">
+                                <textarea  class="form-control"  name="categories" id="categories"
+                                       placeholder="标签">
+                                </textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        提交
+                    </button><span id="tip"> </span>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    </form>

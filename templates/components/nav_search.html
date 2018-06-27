@@ -1,0 +1,43 @@
+<!--导航栏-->
+{% include "components/head.html" %}
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $('#user_items').hide()
+        $('#user').mouseover(function() {
+            if($("#user").children('a').text()!="登录/注册"){
+                $("#user_items").show();
+            }
+        });
+        $('#user').mouseleave(function(){
+            $("#user_items").hide();
+        })
+    });
+</script>
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container-fluid">
+    <!--头部Jelly标识-->
+    <div class="navbar-header">
+      <!--小屏设备（width<768px）隐藏登录标签以及个人信息-->
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#user_info">
+        <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>
+      </button>
+      <a href="/" class="navbar-brand">Jelly</a>
+    </div>
+    <!--登录标签以及个人信息-->
+    <div class="collapse navbar-collapse" id="user_info">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/qa/">QA</a></li>
+        <li id='user'><a href="{{ url }}">{{ name }}</a>
+          <ul id="user_items" class="dropdown-menu dropdown-menu-right">
+          {% load my_filters %}
+          <li><a href="/user/user_info/{{ request.session | get_attr:'_auth_user_id'}}/">个人资料</a></li>
+              <li><a href="/user/logout">退出</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
